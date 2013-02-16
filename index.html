@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Izzlefier</title>
+<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script>
+var izzle={output:'',reset:function(){izzle.output='';},ize:function(){izzle.reset();var content=$("#in").val();if(content!=null&&content.length>0){var lines=content.split('\n');for(i in lines){var words=lines[i].split(' ');for(j in words){var word=words[j];var re=/(.*[^aeiou])[aeiou][a-z][^\.,:;!<>\(\)]*([\.,:;!<>\(\)])*$/i;var matches=re.exec(word);if(j>0){izzle.output+=' ';}
+if(matches!=null&&matches.length>0){var pre=matches[1];var post='';if(pre.substring(pre.length-1)=='s'){post+='h';}else if(pre.substring(pre.length-1)=='q'){post+='u';}
+post+='izzle';var punc='';if(matches[2]!=null){punc=matches[2];}
+izzle.output+=pre+post+punc;}else{izzle.output+=word;}}
+izzle.disp(izzle.output);if(localStorage!=undefined){localStorage.setItem('-izzle-'+$('li').length,izzle.output);}}}},disp:function(txt){$('ul').prepend('<li><span>'+txt+'</span><img src="speak.png" /></li>');$('ul>li:first-child').fadeIn();},init:function(){$("#izz").click(izzle.ize);$("li").live('click',izzle.speak);$("#clr").click(izzle.clear);if(localStorage!=undefined){for(var i=0;i<localStorage.length;i++){if(localStorage.key(i).match('-izzle-')){console.log(localStorage.getItem(localStorage.key(i)));izzle.disp(localStorage.getItem(localStorage.key(i)));}}}
+$("#in").focus();},speak:function(){var mp3able=typeof Audio!=='undefined'?new Audio().canPlayType('audio/mpeg'):'ie';var tts='http://translate.google.com/translate_tts?q='+encodeURIComponent($(this).children('span').html());$("#aud").remove();if(mp3able=='maybe'||mp3able=='probably'||mp3able=='ie'){audio=document.createElement("audio");audio.setAttribute("autoplay","autoplay");audio.setAttribute("src",tts);audio.setAttribute("rel","noreferrer");audio.setAttribute("id","aud");document.body.appendChild(audio);}else{$("body").append('<iframe src="'+tts+'" id="aud" style="visibility:hidden;"></iframe>');}},clear:function(){if(localStorage!=undefined){for(var i=0;i<localStorage.length;i++){if(localStorage.key(i).match('-izzle-')){localStorage.removeItem(localStorage.key(i));}}}
+$('ul').html('');$('#in').val('').focus();}};$(document).ready(izzle.init);
+</script>
+<style>
+html{background:url(bg.png)#34323B;color:#efefef;font-family:helvetica,verdana,sans-serif;}
+div{display:block;margin:0 auto;width:350px;}
+header{display:block;overflow:hidden;width:237px;height:0px;padding-top:102px;background:url(izzlefier.png)no-repeat center;margin:35px 0px 15px 0px;font-size:60px;}
+textarea{display:block;width:338px;height:150px;background-color:#4D4B52;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;padding:5px;font-size:18px;font-family:inherit;color:#ababab;}
+textarea:hover{border-color:#ff9966;}
+input{background-color:#4D4B52;color:#fff;font-weight:bold;padding:10px 25px;font-size:18px;margin:10px 0px;-webkit-transition:all.3s linear;}
+input:hover{border-color:#ff9966;color:#ff9966;}.btn{background:#222 url(grad.png)repeat-x;display:inline-block;padding:10px 25px;color:#fff;text-decoration:none;line-height:1;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-moz-box-shadow:0 1px 3px #999;-webkit-box-shadow:0 1px 3px #999;text-shadow:0 -1px 1px #222;border-bottom:1px solid #222;position:relative;cursor:pointer;width:172px;}
+ul{overflow:auto;font-family:sans-serif;font-size:20px;padding-left:0px;}
+li{display:block;position:relative;border-top:2px dotted #4D4B52;padding:30px 0px;padding-right:44px;display:none;cursor:pointer;-webkit-transition:all .3s linear;}
+li:hover{border-top:2px dotted#000;border-left:4px solid #ff9966;background-color:#4D4B52;padding-left:20px;padding-right:20px;}
+li img{position:absolute;bottom:10px;right:10px;display:none;}
+li:hover img{display:inline;}
+footer{display:block;margin-top:25px;text-align:right;font-size:12px;}
+footer a{color:#ababab;}
+</style>
+</head>
+<body>
+<div>
+<header>The Izzlefier</header>
+<textarea id="in">Enter something awesome here.</textarea>
+<input type="button" id="izz" class="btn" value="Izzlefy" />
+<input type="button" id="clr" class="btn" value="Clear" />
+<ul></ul>
+<footer>Fun by Jake of <a href="http://rockycode.com">RockyCode</a></footer>
+</div>
+</body>
+</html>
